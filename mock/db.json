@@ -1,0 +1,118 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Felipe",
+      "email": "felipe@example.com",
+      "password": "123456",
+      "avatar": "https://randomuser.me/api/portraits/men/1.jpg",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "name": "Instructor One",
+      "email": "instructor1@email.com",
+      "password": "123456",
+      "avatar": "https://randomuser.me/api/portraits/women/2.jpg",
+      "role": "instructor"
+    },
+    {
+      "id": "3",
+      "name": "Student One",
+      "email": "student1@email.com",
+      "password": "123456",
+      "avatar": "https://randomuser.me/api/portraits/men/3.jpg",
+      "role": "student"
+    },
+    {
+      "id": "4",
+      "name": "Instructor Two",
+      "email": "instructor2@email.com",
+      "password": "123456",
+      "avatar": "https://randomuser.me/api/portraits/men/4.jpg",
+      "role": "instructor"
+    }
+  ],
+  "courses": [
+    {
+      "name": "React Fundamentals",
+      "description": "Aprenda os fundamentos do React e construa aplicações modernas",
+      "start_date": "2023-05-01",
+      "end_date": "2023-06-30",
+      "creator_id": 1,
+      "instructors": [
+        1,
+        2
+      ],
+      "id": "1"
+    },
+    {
+      "id": "3",
+      "name": "Web Development Bootcamp",
+      "description": "Curso intensivo de desenvolvimento web, cobrindo front-end e back-end",
+      "start_date": "2023-07-01",
+      "end_date": "2023-09-30",
+      "creator_id": 2,
+      "instructors": [
+        2,
+        1,
+        4
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "title": "Introdução ao React",
+      "status": "published",
+      "publish_date": "2023-05-05T09:00",
+      "video_url": "https://www.youtube.com/embed/qbLc5a9jdXo",
+      "course_id": 1,
+      "id": "1"
+    },
+    {
+      "id": "2",
+      "title": "Componentes e Props",
+      "status": "published",
+      "publish_date": "2023-05-10",
+      "video_url": "https://www.youtube.com/embed/qbLc5a9jdXo",
+      "course_id": 1,
+      "creator_id": 1
+    },
+    {
+      "id": "4",
+      "title": "Manipulação de Eventos",
+      "status": "draft",
+      "publish_date": "2023-05-10",
+      "video_url": "https://www.youtube.com/embed/x_H2GgqjCZI",
+      "course_id": 1,
+      "creator_id": 1
+    },
+    {
+      "id": "5",
+      "title": "JavaScript Avançado: Closures e Escopo",
+      "status": "published",
+      "publish_date": "2023-06-05",
+      "video_url": "https://www.youtube.com/embed/1JsJx1x35c0",
+      "course_id": 3,
+      "creator_id": 1
+    },
+    {
+      "id": "6",
+      "title": "JavaScript Avançado: Programação Assíncrona",
+      "status": "draft",
+      "publish_date": "2023-06-10",
+      "video_url": "https://www.youtube.com/embed/1JsJx1x35c0",
+      "course_id": 3,
+      "creator_id": 1
+    },
+    {
+      "id": "a509",
+      "title": "vdczdsxds",
+      "status": "published",
+      "publish_date": "2025-09-15T23:11",
+      "video_url": "https://www.youtube.com/embed/x_H2GgqjCZI",
+      "course_id": "38ec",
+      "creator_id": 1
+    }
+  ]
+}
