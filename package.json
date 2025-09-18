@@ -1,5 +1,6 @@
 {
   "name": "coursesphere",
+  "type": "module",
   "version": "1.0.0",
   "description": "Plataforma de gestão de cursos online colaborativa",
   "scripts": {
@@ -8,12 +9,18 @@
     "dev": "concurrently \"npm run dev:mock\" \"npm run dev:front\"",
     "install:all": "cd mock && npm install && cd ../front && npm install",
     "build": "cd front && npm run build",
-    "preview": "cd front && npm run preview"
+    "start": "node server.js",
+    "preview": "cd front && npm run preview",
+    "agora_vai": "npm run build && npm start"
   },
   "devDependencies": {
     "concurrently": "^7.6.0"
   },
+  "dependencies": {
+    "express": "^4.18.2",
+    "path": "^0.12.7",
+    "json-server": "^0.17.3"
+  },
   "keywords": ["react", "courses", "education", "platform"],
-  "author": "Felipe Melo",
-  "license": "MIT"
+  "author": "Felipe Melo"
 }

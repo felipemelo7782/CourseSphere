@@ -165,6 +165,8 @@ const CourseDetails: React.FC = () => {
       <div className="px-4 sm:px-6 lg:px-8">
         {/* Course Header */}
         <div className="bg-white shadow rounded-lg p-6 mb-6">
+          {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
+
           <div className="flex justify-between items-start">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">

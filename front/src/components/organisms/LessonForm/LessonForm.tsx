@@ -16,7 +16,6 @@ const LessonForm: React.FC<LessonFormProps> = ({
   onSubmit,
   isLoading = false,
   initialData,
-  courseId,
   isEdit = false,
 }) => {
   const {

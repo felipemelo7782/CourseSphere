@@ -1,13 +1,13 @@
 // front/src/pages/LessonView/LessonView.tsx
 
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { lessonsService, coursesService } from '@/services';
-import { helpers, canEditLesson } from '@/utils';
-import { DashboardLayout } from '@/components/templates';
-import { Button, Loader } from '@/components/atoms';
-import type { Course,Lesson } from '@/types';
-import { useAuth } from '@/hooks';
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import { lessonsService, coursesService } from "@/services";
+import { helpers, canEditLesson } from "@/utils";
+import { DashboardLayout } from "@/components/templates";
+import { Button, Loader } from "@/components/atoms";
+import type { Course, Lesson } from "@/types";
+import { useAuth } from "@/hooks";
 
 const LessonView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,7 +15,7 @@ const LessonView: React.FC = () => {
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [course, setCourse] = useState<Course | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (id) {
@@ -33,8 +33,8 @@ const LessonView: React.FC = () => {
       const courseData = await coursesService.getById(lessonData.course_id);
       setCourse(courseData);
     } catch (error) {
-      setError('Erro ao carregar aula.');
-      console.error('Error loading lesson:', error);
+      setError("Erro ao carregar aula.");
+      console.error("Error loading lesson:", error);
     } finally {
       setIsLoading(false);
     }
@@ -54,8 +54,13 @@ const LessonView: React.FC = () => {
     return (
       <DashboardLayout>
         <div className="text-center py-12">
-          <h2 className="text-2xl font-bold text-gray-900">Aula não encontrada</h2>
-          <Link to="/dashboard" className="text-blue-600 hover:text-blue-800 mt-4 inline-block">
+          <h2 className="text-2xl font-bold text-gray-900">
+            Aula não encontrada
+          </h2>
+          <Link
+            to="/dashboard"
+            className="text-blue-600 hover:text-blue-800 mt-4 inline-block"
+          >
             Voltar para o dashboard
           </Link>
         </div>
@@ -67,7 +72,7 @@ const LessonView: React.FC = () => {
     <DashboardLayout>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
-          <Link 
+          <Link
             to={`/courses/${course.id}`}
             className="text-blue-600 hover:text-blue-800 text-sm font-medium"
           >
@@ -77,30 +82,42 @@ const LessonView: React.FC = () => {
 
         <div className="bg-white shadow rounded-lg overflow-hidden">
           <div className="p-6">
+            {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
+
             <div className="flex justify-between items-start mb-4">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">{lesson.title}</h1>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {lesson.title}
+                </h1>
                 <p className="text-gray-600 mt-1">Curso: {course.name}</p>
               </div>
-              
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${helpers.getStatusColor(lesson.status)}`}>
+
+              <span
+                className={`px-3 py-1 rounded-full text-sm font-medium ${helpers.getStatusColor(
+                  lesson.status
+                )}`}
+              >
                 {helpers.capitalizeFirst(lesson.status)}
               </span>
             </div>
 
             <div className="prose max-w-none mb-6">
               <p className="text-gray-600">
-                Data de publicação: {helpers.formatDateTime(lesson.publish_date)}
+                Data de publicação:{" "}
+                {helpers.formatDateTime(lesson.publish_date)}
               </p>
             </div>
 
             {/* Video Player */}
             <div className="mb-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">Vídeo da Aula</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-3">
+                Vídeo da Aula
+              </h2>
               <div className="aspect-w-16 aspect-h-9 bg-black rounded-lg overflow-hidden">
-                {lesson.video_url.includes('youtube.com') || lesson.video_url.includes('youtu.be') ? (
+                {lesson.video_url.includes("youtube.com") ||
+                lesson.video_url.includes("youtu.be") ? (
                   <iframe
-                    src={lesson.video_url.replace('watch?v=', 'embed/')}
+                    src={lesson.video_url.replace("watch?v=", "embed/")}
                     className="w-full h-96"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

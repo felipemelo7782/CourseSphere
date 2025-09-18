@@ -1,12 +1,16 @@
 import axios from "axios";
 
-const API_BASE_URL = 'http://localhost:3001';
+// Base URL
+const API_BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "/api" // JSON Server servido pelo mesmo server no Render
+    : "http://localhost:3000/api"; // Local: server.js roda na porta 3000
 
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Interceptor para adicionar o token de autenticação
+// Interceptor para adicionar token de autenticação
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("authToken");
   if (token) {
