@@ -2,13 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
-import {
-  coursesService,
-  lessonsService,
-  externalService,
-  usersService,
-} from "@/services";
-import type { Course, Lesson, ExternalUser } from "@/types";
+import { coursesService, lessonsService, usersService } from "@/services";
+import type { Course, Lesson, User } from "@/types";
 import {
   helpers,
   canCreateLesson,
@@ -17,7 +12,7 @@ import {
   canEditLesson,
 } from "@/utils";
 import { DashboardLayout } from "@/components/templates";
-import { Button, Loader } from "@/components/atoms";
+import { Button, Loader, Input } from "@/components/atoms";
 import { SearchBar } from "@/components/molecules";
 
 const CourseDetails: React.FC = () => {
@@ -26,15 +21,14 @@ const CourseDetails: React.FC = () => {
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [filteredLessons, setFilteredLessons] = useState<Lesson[]>([]);
-  const [instructors, setInstructors] = useState<any[]>([]);
+  const [instructors, setInstructors] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [showInstructorModal, setShowInstructorModal] = useState(false);
-  const [suggestedInstructors, setSuggestedInstructors] = useState<
-    ExternalUser[]
-  >([]);
+  const [availableInstructors, setAvailableInstructors] = useState<User[]>([]);
+  const [searchInstructor, setSearchInstructor] = useState("");
 
   useEffect(() => {
     if (id) {
@@ -87,20 +81,21 @@ const CourseDetails: React.FC = () => {
     setFilteredLessons(filtered);
   };
 
-  const handleAddInstructor = async (instructorId: number) => {
+  const handleAddInstructor = async (instructorId: number | string) => {
     if (!course) return;
 
     try {
       await coursesService.addInstructor(course.id, instructorId);
       loadCourseData();
       setShowInstructorModal(false);
+      setSearchInstructor("");
     } catch (error) {
       alert("Erro ao adicionar instrutor.");
       console.error("Error adding instructor:", error);
     }
   };
 
-  const handleRemoveInstructor = async (instructorId: number) => {
+  const handleRemoveInstructor = async (instructorId: number | string) => {
     if (!course) return;
 
     try {
@@ -129,14 +124,34 @@ const CourseDetails: React.FC = () => {
     }
   };
 
-  const loadSuggestedInstructors = async () => {
+  const loadAvailableInstructors = async () => {
     try {
-      const users = await externalService.getRandomUsers(5);
-      setSuggestedInstructors(users);
+      // Buscar todos os usuários com papel de instrutor
+      const allUsers = await usersService.getAll();
+      const instructorUsers = allUsers.filter(
+        (user) => user.role === "instructor"
+      );
+
+      // Filtrar instrutores que já não estão no curso
+      const currentInstructorIds = course?.instructors || [];
+      const available = instructorUsers.filter(
+        (instructor) =>
+          !currentInstructorIds
+            .map((id) => id.toString())
+            .includes(instructor.id.toString())
+      );
+
+      setAvailableInstructors(available);
     } catch (error) {
-      console.error("Error loading suggested instructors:", error);
+      console.error("Error loading available instructors:", error);
     }
   };
+
+  const filteredAvailableInstructors = availableInstructors.filter(
+    (instructor) =>
+      instructor.name.toLowerCase().includes(searchInstructor.toLowerCase()) ||
+      instructor.email.toLowerCase().includes(searchInstructor.toLowerCase())
+  );
 
   if (isLoading) {
     return (
@@ -227,7 +242,7 @@ const CourseDetails: React.FC = () => {
                   size="sm"
                   onClick={() => {
                     setShowInstructorModal(true);
-                    loadSuggestedInstructors();
+                    loadAvailableInstructors();
                   }}
                 >
                   + Adicionar Instrutor
@@ -336,52 +351,69 @@ const CourseDetails: React.FC = () => {
 
         {/* Add Instructor Modal */}
         {showInstructorModal && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg p-6 max-w-md w-full">
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-96 overflow-y-auto">
               <h3 className="text-lg font-medium text-gray-900 mb-4">
                 Adicionar Instrutor
               </h3>
 
-              <div className="space-y-3">
-                {suggestedInstructors.map((suggested) => (
-                  <div
-                    key={suggested.login.uuid}
-                    className="flex items-center justify-between p-3 border border-gray-200 rounded"
-                  >
-                    <div className="flex items-center">
-                      <img
-                        src={suggested.picture.medium}
-                        alt={`${suggested.name.first} ${suggested.name.last}`}
-                        className="h-8 w-8 rounded-full mr-3"
-                      />
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">
-                          {suggested.name.first} {suggested.name.last}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {suggested.email}
-                        </p>
-                      </div>
-                    </div>
-                    <Button
-                      size="sm"
-                      onClick={() => {
-                        const randomId = Math.floor(Math.random() * 1000) + 100;
-                        handleAddInstructor(randomId);
-                      }}
-                    >
-                      Adicionar
-                    </Button>
-                  </div>
-                ))}
+              <div className="mb-4">
+                <Input
+                  type="text"
+                  placeholder="Buscar instrutor por nome ou email..."
+                  value={searchInstructor}
+                  onChange={(e) => setSearchInstructor(e.target.value)}
+                />
               </div>
 
-              <div className="mt-6 flex justify-end space-x-3">
+              <div className="space-y-3">
+                {filteredAvailableInstructors.length === 0 ? (
+                  <p className="text-gray-500 text-center py-4">
+                    {searchInstructor
+                      ? "Nenhum instrutor encontrado com esses critérios."
+                      : "Não há instrutores disponíveis para adicionar."}
+                  </p>
+                ) : (
+                  filteredAvailableInstructors.map((instructor) => (
+                    <div
+                      key={instructor.id}
+                      className="flex items-center justify-between p-3 border border-gray-200 rounded"
+                    >
+                      <div className="flex items-center">
+                        <img
+                          src={instructor.avatar}
+                          alt={instructor.name}
+                          className="h-8 w-8 rounded-full mr-3"
+                        />
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">
+                            {instructor.name}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {instructor.email}
+                          </p>
+                        </div>
+                      </div>
+                      <Button
+                        size="sm"
+                        onClick={() => handleAddInstructor(instructor.id)}
+                      >
+                        Adicionar
+                      </Button>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              <div className="mt-6 flex justify-end">
                 <Button
                   variant="outline"
-                  onClick={() => setShowInstructorModal(false)}
+                  onClick={() => {
+                    setShowInstructorModal(false);
+                    setSearchInstructor("");
+                  }}
                 >
-                  Cancelar
+                  Fechar
                 </Button>
               </div>
             </div>

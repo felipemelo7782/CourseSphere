@@ -1,7 +1,7 @@
 // front/src/services/users.ts
 
 import api from './api';
-import type { User } from '@/types';
+import type { CreateUserData, User } from '@/types';
 
 export const usersService = {
   async getAll(): Promise<User[]> {
@@ -21,8 +21,8 @@ export const usersService = {
     return response.data[0] || null;
   },
 
-  async create(userData: Omit<User, 'id'>): Promise<User> {
-    const response = await api.post('/users', userData);
+  async create(userData: CreateUserData): Promise<User> {
+    const response = await api.post("/users", userData);
     return response.data;
   },
 

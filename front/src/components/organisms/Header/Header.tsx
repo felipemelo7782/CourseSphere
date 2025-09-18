@@ -1,9 +1,9 @@
 // front/src/components/organisms/Header/Header.tsx
 
-import React from 'react';
-import { Button } from '@/components/atoms';
-import { useAuth } from '@/hooks/useAuth';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Button } from "@/components/atoms";
+import { useAuth } from "@/hooks/useAuth";
+import { Link } from "react-router-dom";
 
 const Header: React.FC = () => {
   const { user, logout } = useAuth();
@@ -17,13 +17,20 @@ const Header: React.FC = () => {
               CourseSphere
             </Link>
           </div>
-          
+
           <div className="flex items-center space-x-4">
+            {user?.role !== "student" && (
+              <Link to="/register">
+                <Button variant="secondary" className="ml-4 mr-4">
+                  + Adicionar usuário
+                </Button>
+              </Link>
+            )}
             {user && (
               <>
                 <div className="flex items-center space-x-2">
                   <img
-                    src={user.avatar || '/default-avatar.png'}
+                    src={user.avatar || "/default-avatar.png"}
                     alt={user.name}
                     className="h-8 w-8 rounded-full"
                   />
@@ -31,15 +38,12 @@ const Header: React.FC = () => {
                     {user.name}
                   </span>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={logout}
-                >
+                <Button variant="outline" size="sm" onClick={logout}>
                   Sair
                 </Button>
               </>
             )}
+            
           </div>
         </div>
       </div>

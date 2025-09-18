@@ -1,5 +1,3 @@
-// front/src/services/courses.ts
-
 import api from "./api";
 import type { Course, CourseFormData, CreateCourseData } from "@/types";
 
@@ -9,12 +7,12 @@ export const coursesService = {
     return response.data;
   },
 
-  async getById(id: number | string): Promise<Course> {
+  async getById(id: number|string): Promise<Course> {
     const response = await api.get(`/courses/${id}`);
     return response.data;
   },
 
-  async getByUserId(userId: number): Promise<Course[]> {
+  async getByUserId(userId: number|string): Promise<Course[]> {
     const response = await api.get("/courses", {
       params: {
         creator_id: userId,
@@ -24,14 +22,12 @@ export const coursesService = {
     return response.data;
   },
 
-  // Usar CreateCourseData para criação
   async create(courseData: CreateCourseData): Promise<Course> {
     const response = await api.post("/courses", courseData);
     return response.data;
   },
 
-  // Usar CourseFormData para atualização
-  async update(id: number | string, courseData: CourseFormData): Promise<Course> {
+  async update(id: number|string, courseData: Partial<CourseFormData>): Promise<Course> {
     console.log("🔄 Enviando PUT para:", `/courses/${id}`);
     console.log("📦 Dados:", courseData);
 
@@ -45,32 +41,35 @@ export const coursesService = {
     }
   },
 
-  async delete(id: number | string): Promise<void> {
+  async delete(id: number|string): Promise<void> {
     await api.delete(`/courses/${id}`);
   },
 
-  async addInstructor(courseId: number | string, instructorId: number): Promise<Course> {
+  async addInstructor(courseId: number|string, instructorId: number|string): Promise<Course> {
     const course = await this.getById(courseId);
     const updatedInstructors = [...course.instructors, instructorId];
 
-    const response = await api.patch(`/courses/${courseId}`, {
+    // ✅ Usar PUT em vez de PATCH para garantir que todo o objeto seja atualizado
+    const response = await api.put(`/courses/${courseId}`, {
+      ...course,
       instructors: updatedInstructors,
     });
     return response.data;
   },
 
-  async removeInstructor(
-    courseId: number | string,
-    instructorId: number
-  ): Promise<Course> {
+  async removeInstructor(courseId: number|string, instructorId: number|string): Promise<Course> {
     const course = await this.getById(courseId);
     const updatedInstructors = course.instructors.filter(
-      (id) => id !== instructorId
+      (id) => id.toString() !== instructorId.toString()
     );
 
-    const response = await api.patch(`/courses/${courseId}`, {
+    // ✅ CORREÇÃO: Usar PUT com o objeto completo
+    const response = await api.put(`/courses/${courseId}`, {
+      ...course,
       instructors: updatedInstructors,
     });
+    
+    console.log("✅ Instrutor removido. Novos instrutores:", updatedInstructors);
     return response.data;
   },
 };

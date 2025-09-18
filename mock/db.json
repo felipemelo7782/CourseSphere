@@ -35,16 +35,30 @@
   ],
   "courses": [
     {
-      "name": "React Fundamentals",
+      "id": "1",
       "description": "Aprenda os fundamentos do React e construa aplicações modernas",
       "start_date": "2023-05-01",
       "end_date": "2023-06-30",
       "creator_id": 1,
       "instructors": [
         1,
-        2
+        "2",
+        "4"
       ],
-      "id": "1"
+      "name": "React Fundamentals"
+    },
+    {
+      "id": "2",
+      "name": "Web Development Bootcamp",
+      "description": "Curso intensivo de desenvolvimento web, cobrindo front-end e back-end",
+      "start_date": "2023-07-01",
+      "end_date": "2023-09-30",
+      "creator_id": 2,
+      "instructors": [
+        2,
+        1,
+        4
+      ]
     },
     {
       "id": "3",

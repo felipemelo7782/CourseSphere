@@ -18,6 +18,7 @@ import {
 } from "@/pages";
 import { Loader } from "@/components/atoms";
 import { useAuth } from "./hooks/useAuth";
+import Register from "./pages/Register";
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
@@ -61,6 +62,14 @@ const AppRoutes: React.FC = () => {
           <PublicRoute>
             <Login />
           </PublicRoute>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <ProtectedRoute>
+            <Register />
+          </ProtectedRoute>
         }
       />
 

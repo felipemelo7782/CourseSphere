@@ -56,7 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // No login, garantir que o id seja número
       setUser({
         ...userData,
-        id: Number(userData.id), // Forçar conversão para número ()
+        id: userData.id, // Manter como string
       });
     } catch (error) {
       console.error("Falha no login:", error);
