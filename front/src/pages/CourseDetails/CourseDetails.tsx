@@ -212,7 +212,11 @@ const CourseDetails: React.FC = () => {
               {instructors.map((instructor) => (
                 <div
                   key={instructor.id}
-                  className="flex items-center bg-gray-50 rounded-full px-3 py-1"
+                  className={`flex items-center ${
+                    instructor.id.toString() === user?.id.toString()
+                      ? "bg-blue-100"
+                       : "bg-gray-50"
+                  } rounded-full px-3 py-2`}
                 >
                   <img
                     src={instructor.avatar}
@@ -224,7 +228,7 @@ const CourseDetails: React.FC = () => {
                   </span>
 
                   {isCourseCreator(course, Number(user?.id)) &&
-                    instructor.id !== Number(user?.id) && (
+                    instructor.id.toString() !== user?.id.toString() && (
                       <button
                         onClick={() =>
                           handleRemoveInstructor(Number(instructor.id))
