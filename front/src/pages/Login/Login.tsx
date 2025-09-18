@@ -112,7 +112,7 @@ const Login: React.FC = () => {
             Credenciais de teste:
           </h4>
           <div className="text-xs text-gray-600 space-y-1">
-            <p>Admin: admin@email.com / 123456</p>
+            <p>Admin: felipe@example.com / 123456</p>
             <p>Instrutor: instructor1@email.com / 123456</p>
             <p>Estudante: student1@email.com / 123456</p>
           </div>
