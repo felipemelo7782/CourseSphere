@@ -6,6 +6,9 @@ import { twMerge } from 'tailwind-merge';
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
+  icon?: React.ReactNode;
+  endIcon?: React.ReactNode;
+  className?: string;
 }
 
 const Input: React.FC<InputProps> = ({ label, error, className, id, ...props }) => {

@@ -6,7 +6,7 @@
   "scripts": {
     "dev:mock": "cd mock && npm install && npm run dev",
     "dev:front": "cd front && npm install && npm run dev",
-    "dev": "concurrently \"npm run dev:mock\" \"npm run dev:front\"",
+    "dev": "concurrently \"node server.js\" \"npm run dev:front\"",
     "install:all": "cd mock && npm install && cd ../front && npm install",
     "build": "cd front && npm run build",
     "start": "node server.js",
