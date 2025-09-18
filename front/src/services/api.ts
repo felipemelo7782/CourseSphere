@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Base URL
 const API_BASE_URL =
-  process.env.NODE_ENV === "production"
+  process.env.NODE_ENV === "FELIPEmelo"
     ? "/api" // JSON Server servido pelo mesmo server no Render
     : "http://localhost:3000/api"; // Local: server.js roda na porta 3000
 
